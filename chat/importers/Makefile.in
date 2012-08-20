@@ -1,0 +1,37 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+
+DEPTH		= ../..
+topsrcdir	= @top_srcdir@
+srcdir		= @srcdir@
+VPATH		= @srcdir@
+
+include $(DEPTH)/config/autoconf.mk
+
+EXTRA_COMPONENTS = \
+		pidgin.js pidgin.manifest \
+		xchat.js xchat.manifest \
+		$(NULL)
+
+ifeq ($(OS_ARCH),WINNT)
+EXTRA_COMPONENTS += \
+		aim.js aim.manifest \
+		googletalk.js googletalk.manifest \
+		mIRC.js mIRC.manifest \
+		wlm.js wlm.manifest \
+		$(NULL)
+endif
+
+ifeq ($(OS_ARCH),Darwin)
+EXTRA_COMPONENTS += \
+		colloquy.js colloquy.manifest \
+		$(NULL)
+endif
+
+ifdef ENABLE_TESTS
+relativesrcdir = chat/importers/
+XPCSHELL_TESTS = test
+endif
+
+include $(topsrcdir)/config/rules.mk

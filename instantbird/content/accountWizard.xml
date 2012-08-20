@@ -1,0 +1,248 @@
+<?xml version="1.0"?>
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!DOCTYPE bindings [
+  <!ENTITY % accountWizardDTD SYSTEM "chrome://instantbird/locale/accountWizard.dtd">
+  %accountWizardDTD;
+  <!ENTITY % accountsDTD SYSTEM "chrome://instantbird/locale/accounts.dtd">
+  %accountsDTD;
+]>
+
+<bindings id="accountWizardBindings"
+          xmlns="http://www.mozilla.org/xbl"
+          xmlns:xul="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+          xmlns:xbl="http://www.mozilla.org/xbl">
+
+  <binding id="topProtocol" extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
+    <content align="center">
+      <xul:image xbl:inherits="src=prplicon" class="topProtoIcon"/>
+      <xul:vbox>
+        <xul:label xbl:inherits="value=name" class="topProtoName"/>
+        <xul:description xbl:inherits="value=description" class="topProtoDescription"/>
+      </xul:vbox>
+    </content>
+    <implementation>
+      <method name="build">
+        <parameter name="aProtocol"/>
+        <parameter name="aDescription"/>
+        <body>
+        <![CDATA[
+          this.setAttribute("name", aProtocol.name);
+          this.setAttribute("description", aDescription);
+          this.setAttribute("prplicon", aProtocol.iconBaseURI + "icon32.png");
+          this.value = aProtocol.id;
+        ]]>
+        </body>
+      </method>
+      <!-- override the default accessible name.
+           This is also used for typeahead selection. -->
+      <property name="label" onget="return this.getAttribute('name');"/>
+    </implementation>
+  </binding>
+
+  <binding id="existingAccount" extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
+    <content>
+      <xul:vbox flex="1">
+        <xul:hbox flex="1" align="center">
+          <xul:vbox>
+            <xul:checkbox anonid="accountSelected"
+                          xbl:inherits="checked" class="summaryCheckbox"
+                          oncommand="document.getBindingParent(this).updateChecked();"/>
+          </xul:vbox>
+          <xul:vbox>
+            <xul:image xbl:inherits="src=prplicon" class="summaryIcon"/>
+          </xul:vbox>
+          <xul:vbox flex="1">
+            <xul:hbox align="baseline">
+              <xul:description xbl:inherits="value=username" class="summaryName"/>
+              <xul:separator flex="1" hidden="true"/>
+              <xul:checkbox label="&accountSummary.connectAutomatically.label;"
+                            dir="reverse" class="summaryAutologinCheckbox" hidden="true"
+                            anonid="autologin"/>
+            </xul:hbox>
+            <xul:hbox align="center" class="textGroup">
+              <xul:label class="showChecked" value="&accountExisting.doImport.label;"/>
+              <xul:label class="hideChecked" value="&accountExisting.noImport.label;"/>
+              <xul:label class="summaryImporterText showChecked" anonid="singleClient"/>
+              <xul:menulist class="summaryImporterList hiddenSource showChecked"
+                            anonid="availableImporters"/>
+            </xul:hbox>
+          </xul:vbox>
+        </xul:hbox>
+      </xul:vbox>
+    </content>
+    <implementation>
+      <property name="autologin"
+                onget="return document.getAnonymousElementByAttribute(this,
+                                                  'anonid',
+                                                  'autologin').checked;"/>
+      <property name="checked"
+                onget="return document.getAnonymousElementByAttribute(this,
+                                                  'anonid',
+                                                  'accountSelected').checked;"/>
+      <method name="build">
+        <parameter name="aExistingAccount"/>
+        <body>
+        <![CDATA[
+          this.setAttribute("username", aExistingAccount.name);
+          this.setAttribute("checked", true);
+          this.addAccount(aExistingAccount);
+
+          document.getAnonymousElementByAttribute(this, "anonid", "autologin")
+                  .checked = aExistingAccount.autoLogin;
+
+          let protocol = Services.core.getProtocolById(aExistingAccount.protocolId);
+          if (protocol)
+            this.setAttribute("prplicon", protocol.iconBaseURI + "icon32.png");
+          else
+            Cu.reportError("Attempted to build existingAccount binding with null protocol!");
+        ]]>
+        </body>
+      </method>
+      <method name="compareToAccount">
+        <parameter name="aExistingAccount"/>
+        <body>
+        <![CDATA[
+          let account = this.account[this.getSelectedImporterId()];
+          return (account.name == aExistingAccount.name &&
+                  account.protocolId == aExistingAccount.protocolId);
+        ]]>
+        </body>
+      </method>
+      <method name="addAccount">
+        <parameter name="aExistingAccount"/>
+        <body>
+        <![CDATA[
+          // Locate the importer from its ID to retrieve the display name.
+          let importerId = aExistingAccount.importerId;
+          let importer = Services.importers.getImporterById(importerId);
+
+          // If this is the first importer to find this account, the label needs
+          // to be set as well.
+          let label = document.getAnonymousElementByAttribute(this, "anonid",
+                                                              "singleClient");
+          if (!label.value)
+            label.setAttribute("value", importer.name);
+
+          // Add a menulist entry (regardless if it is shown yet)
+          let importers = document.getAnonymousElementByAttribute(this, "anonid",
+                                                                  "availableImporters");
+          let newitem = importers.appendItem(importer.name);
+          newitem.value = importerId;
+
+          // Store this account as well.
+          if (!this.account)
+            this.account = {};
+          this.account[importerId] = aExistingAccount;
+
+          if (importers.itemCount > 1) {
+            label.className += " hiddenSource";
+            importers.className = "summaryImporterList showChecked";
+          }
+
+          if (!importers.selectedItem)
+            importers.selectedIndex = 0;
+        ]]>
+        </body>
+      </method>
+      <method name="updateChecked">
+        <body>
+        <![CDATA[
+          let checkbox = document.getAnonymousElementByAttribute(this, "anonid",
+                                                                 "accountSelected");
+          this.setAttribute("checked", checkbox.checked);
+        ]]>
+        </body>
+      </method>
+      <method name="getSelectedImporterId">
+        <body>
+        <![CDATA[
+          let importers = document.getAnonymousElementByAttribute(this, "anonid",
+                                                                  "availableImporters");
+          return importers.selectedItem.value;
+        ]]>
+        </body>
+      </method>
+    </implementation>
+  </binding>
+
+  <binding id="newAccount" extends="chrome://global/content/bindings/richlistbox.xml#richlistitem">
+    <content align="top">
+      <xul:vbox flex="1">
+        <xul:hbox flex="1" align="center">
+          <xul:vbox>
+            <xul:checkbox anonid="accountSelected"
+                          xbl:inherits="checked" class="summaryCheckbox"
+                          oncommand="document.getBindingParent(this).updateChecked();"/>
+          </xul:vbox>
+          <xul:vbox>
+            <xul:image xbl:inherits="src=prplicon" class="summaryIcon"/>
+          </xul:vbox>
+          <xul:vbox flex="1">
+            <xul:hbox align="baseline">
+              <xul:description xbl:inherits="value=username" class="summaryName"/>
+              <xul:separator flex="1" hidden="true"/>
+              <xul:checkbox label="&accountSummary.connectAutomatically.label;"
+                            dir="reverse" class="summaryAutologinCheckbox" hidden="true"
+                            anonid="autologin" checked="false"/>
+            </xul:hbox>
+            <xul:hbox align="center" class="textGroup">
+              <xul:label class="showChecked" value="&accountNew.doCreate.label;"/>
+              <xul:label class="hideChecked" value="&accountNew.noCreate.label;"/>
+            </xul:hbox>
+          </xul:vbox>
+        </xul:hbox>
+      </xul:vbox>
+    </content>
+    <implementation>
+      <property name="checked"
+                onget="return document.getAnonymousElementByAttribute(this,
+                                                  'anonid',
+                                                  'accountSelected').checked;"/>
+      <property name="protocolId"
+                onget="return this.getAttribute('protocolId');"
+                onset="return this.setAttribute('protocolId', val);"/>
+      <property name="password"
+                onget="return this.getAttribute('password');"
+                onset="return this.setAttribute('password', val);"/>
+      <property name="alias"
+                onget="return this.getAttribute('alias');"
+                onset="return this.setAttribute('alias', val);"/>
+      <property name="autologin"
+                onget="return document.getAnonymousElementByAttribute(this,
+                                                  'anonid',
+                                                  'autologin').checked;"/>
+      <method name="build">
+        <parameter name="aAccountObj"/>
+        <body>
+        <![CDATA[
+          let protoIcon = aAccountObj.proto.iconBaseURI + "icon32.png";
+          this.setAttribute("prplicon", protoIcon);
+          this.setAttribute("protocolId", aAccountObj.proto.id);
+          this.setAttribute("username", aAccountObj.username.value);
+          this.setAttribute("checked", true);
+
+          if (!aAccountObj.proto.noPassword && aAccountObj.password)
+            this.password = aAccountObj.password;
+          if (aAccountObj.alias)
+            this.alias = aAccountObj.alias;
+          this.options = aAccountObj.options;
+          this.proxy = aAccountObj.proxy;
+        ]]>
+        </body>
+      </method>
+      <method name="updateChecked">
+        <body>
+        <![CDATA[
+          let checkbox = document.getAnonymousElementByAttribute(this, "anonid",
+                                                                 "accountSelected");
+          this.setAttribute("checked", checkbox.checked);
+        ]]>
+        </body>
+      </method>
+    </implementation>
+  </binding>
+
+</bindings>

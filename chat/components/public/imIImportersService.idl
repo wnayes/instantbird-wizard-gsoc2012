@@ -1,0 +1,98 @@
+/* This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
+// This is an XPIDL interface file defining the XPCOM interfaces written for the
+// project. A brief summary of the three interfaces:
+//   imIExistingAccount: An object passed to the UI containing the found
+//     information of an account.
+//   imIImporter: A script that performs a search for accounts configured in
+//     a certain messaging client.
+//   imIImportersService: Handles calls to each imIImporter and tracks idle
+//     notifications for data import.
+
+#include "nsISupports.idl"
+#include "nsISimpleEnumerator.idl"
+#include "nsIObserver.idl"
+#include "imIAccount.idl"
+
+[scriptable, uuid(c6363da8-04a9-4347-972a-8940ded9cde0)]
+interface imIExistingAccount: nsISupports {
+  readonly attribute AUTF8String name;
+  readonly attribute AUTF8String protocolId;
+  readonly attribute AUTF8String importerId;
+
+  // This time is used to approximate which account is more relevant if a
+  // conflict occurs. A value of 0 indicates this is unknown.
+  attribute PRTime dateModified;
+
+  attribute boolean autoLogin;
+  attribute AUTF8String password;
+  attribute AUTF8String alias;
+
+  // returns an enumerator of prplIPref containing default values set different
+  // than the protocol defaults.
+  nsISimpleEnumerator getOptions();
+
+  // Set the protocol specific options
+  void setBool(in string aName, in boolean aVal);
+  void setInt(in string aName, in long aVal);
+  void setString(in string aName, in AUTF8String aVal);
+};
+
+[scriptable, uuid(59fd4143-c8ab-4e55-b139-98b57e10bcee)]
+interface imIImporter: nsISupports {
+  readonly attribute AUTF8String name;
+  readonly attribute AUTF8String id;
+
+  // Searches for accounts configured by the client software.
+  // When found, the imIImportersService is notified.
+  //
+  // Supported notifications:
+  //  importer-found-account
+  //    aSubject points to the imImportedAccount found.
+  //  importer-search-finished
+  void findAccounts(in nsIObserver aObserver);
+
+  // Handles the task of importing data for an account found from findAccounts.
+  // This method should update its status after completing a task by notifying
+  // 'import-status-updated' with any needed status information in aData.
+  //
+  // Supported notifications:
+  //  import-status-updated
+  //    aSubject is the aAccount which owns the data.
+  //    aData is the preference string with updated status.
+  void importData(in imIAccount aAccount, in string aPreference,
+                  in nsIObserver aObserver);
+};
+
+[scriptable, uuid(d1f32c53-2272-4852-9564-4ab00f92b4dd)]
+interface imIImportersService: nsISupports {
+  // Sets the service to observe idle notifications if pending importable data
+  // remains.
+  void initImporters();
+
+  // Closes any observation of idle notifications.
+  void unInitImporters();
+
+  // Returns an instance of an imIImporter based on ID.
+  imIImporter getImporterById(in AUTF8String aImporterId);
+
+  // Each importer checks for available accounts.
+  // The observer (UI) will be notified of new accounts discovered.
+  //
+  // Supported notifications:
+  //  existing-account-found
+  //    aSubject points to the imImportedAccount found.
+  //  account-search-finished
+  void findAccounts(in nsIObserver aObserver);
+
+  // When an account is created, it must be queued for importing data. This
+  // creates the preference indicating an awaiting import.
+  void queueAccount(in string aAccountId, in string aImporterId);
+
+  // observe should only be called by the imIImporter implementations to report
+  // changes.
+  void observe(in nsISupports aObject, in string aTopic,
+               [optional] in wstring aData);
+};

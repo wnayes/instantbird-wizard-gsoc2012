@@ -1,0 +1,3 @@
+component {d89d3c75-bb22-4a1b-9078-19361b5e2b8a} colloquy.js
+contract @mozilla.org/chat/colloquyimporter;1 {d89d3c75-bb22-4a1b-9078-19361b5e2b8a}
+category im-import-plugin importer-colloquy @mozilla.org/chat/colloquyimporter;1

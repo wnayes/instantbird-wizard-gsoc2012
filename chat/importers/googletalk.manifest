@@ -1,0 +1,3 @@
+component {24df4c97-6526-4938-9880-f88d9013910d} googletalk.js
+contract @mozilla.org/chat/googletalkimporter;1 {24df4c97-6526-4938-9880-f88d9013910d}
+category im-import-plugin importer-googletalk @mozilla.org/chat/googletalkimporter;1

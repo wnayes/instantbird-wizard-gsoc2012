@@ -1,0 +1,3 @@
+component {5063dfc7-1e04-42c1-be9f-8480f42ffd65} pidgin.js
+contract @mozilla.org/chat/pidginimporter;1 {5063dfc7-1e04-42c1-be9f-8480f42ffd65}
+category im-import-plugin importer-pidgin @mozilla.org/chat/pidginimporter;1

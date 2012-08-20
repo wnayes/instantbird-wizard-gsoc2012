@@ -1,0 +1,6 @@
+component {2aa7b114-6937-4eab-bb5e-f4ff874a2a77} aim.js
+contract @mozilla.org/chat/aim6ximporter;1 {2aa7b114-6937-4eab-bb5e-f4ff874a2a77}
+category im-import-plugin importer-aim6x @mozilla.org/chat/aim6ximporter;1
+component {0eb885e8-1fa2-4761-ada1-8a44ee339ec4} aim.js
+contract @mozilla.org/chat/aim7ximporter;1 {0eb885e8-1fa2-4761-ada1-8a44ee339ec4}
+category im-import-plugin importer-aim7x @mozilla.org/chat/aim7ximporter;1

@@ -1,0 +1,41 @@
+<!-- This Source Code Form is subject to the terms of the Mozilla Public
+   - License, v. 2.0. If a copy of the MPL was not distributed with this
+   - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+
+<!ENTITY windowTitle.label            "Account Wizard">
+
+<!ENTITY accountWelcomeTitle.label    "Welcome">
+<!ENTITY accountWelcomeInfo.label2    "This wizard will guide you through configuring accounts for &brandShortName;.">
+<!ENTITY accountWelcomeSkip.label     "If you wish to create new accounts instead, press Skip.">
+
+<!ENTITY accountProtocolTitle.label   "Protocol">
+<!ENTITY accountProtocolInfo.label2   "Please choose the protocol of your IM account.">
+<!ENTITY accountProtocolGetMore.label "Get more…">
+<!ENTITY accountProtocolShowMore.label  "Show all protocols">
+<!ENTITY accountProtocolShowMore.description  "Choose from the full list of protocols">
+
+<!ENTITY accountUsernameTitle.label   "Username">
+<!ENTITY accountUsernameDuplicate.label "This account is already configured!">
+
+<!ENTITY accountPasswordTitle.label   "Password">
+<!ENTITY accountPasswordInfo.label    "Please enter your password in the box below.">
+<!ENTITY accountPasswordField.label   "Password:">
+<!ENTITY accountPasswordManager.label "The password entered here will be stored in the Password Manager. Leave this box empty if you want to be prompted for your password each time this account is connected.">
+
+<!ENTITY accountAdvancedTitle.label   "Advanced Options">
+<!ENTITY accountAdvancedInfo.label    "Feel free to skip this step if you want to.">
+<!ENTITY accountAdvanced.newMailNotification.label   "Notify on new Mail">
+<!ENTITY accountAliasGroupbox.caption "Local Alias">
+<!ENTITY accountAliasField.label      "Alias:">
+<!ENTITY accountAliasInfo.label       "This will only be displayed in your conversations when you talk, remote buddies won't see it.">
+<!ENTITY accountProxySettings.caption "Proxy Settings">
+<!ENTITY accountProxySettings.change.label     "Change…">
+<!ENTITY accountProxySettings.change.accessKey "C">
+
+<!ENTITY accountSummaryTitle.label    "Summary">
+<!ENTITY accountSummaryInfo.label2    "Here is a summary of the accounts that will be created.">
+<!ENTITY accountSummary.connectAutomatically.label "Connect automatically.">
+<!ENTITY accountExisting.doImport.label    "Will be imported from:">
+<!ENTITY accountExisting.noImport.label    "Will not be imported">
+<!ENTITY accountNew.doCreate.label    "Will be created">
+<!ENTITY accountNew.noCreate.label    "Will not be created">

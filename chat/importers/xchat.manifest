@@ -1,0 +1,3 @@
+component {9043aa53-d133-4ca9-a5ce-01dc22ee5159} xchat.js
+contract @mozilla.org/chat/xchatimporter;1 {9043aa53-d133-4ca9-a5ce-01dc22ee5159}
+category im-import-plugin importer-xchat @mozilla.org/chat/xchatimporter;1
