@@ -7,9 +7,15 @@ This repository contains the final code I produced during the Google Summer of C
 
 Here is my original abstract for the project:
 
-    When evaluating a new messaging client, the common frustration of reconfiguring accounts and settings is difficult to avoid. To combat similar issues, the developers at Mozilla have implemented account import wizards in their Firefox and Thunderbird software packages. I propose creating an Account Import Wizard for the IM client Instantbird, which will provide users with a flexible way to import profile data from existing messaging client installations.
+    When evaluating a new messaging client, the common frustration of reconfiguring accounts and settings is difficult to
+    avoid. To combat similar issues, the developers at Mozilla have implemented account import wizards in their Firefox
+    and Thunderbird software packages. I propose creating an Account Import Wizard for the IM client Instantbird, which
+    will provide users with a flexible way to import profile data from existing messaging client installations.
     
-    Specifically, I plan to implement a wizard which will allow users to import not only their existing protocol credentials, but conversation logs as well. Providing account import will encourage adoption of the Instantbird client, while conversation log import will prevent the need to return to previous client software to recall important conversations.
+    Specifically, I plan to implement a wizard which will allow users to import not only their existing protocol
+    credentials, but conversation logs as well. Providing account import will encourage adoption of the Instantbird
+    client, while conversation log import will prevent the need to return to previous client software to recall important
+    conversations.
 
 ## Results
 
