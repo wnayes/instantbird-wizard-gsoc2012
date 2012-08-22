@@ -1,6 +1,10 @@
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+   
+<!-- This was a localization file for the wizard. This was included in the
+   - repository for reference to the strings found in the other UI files.
+   - Only a handful of strings were added/modified. -->
 
 <!ENTITY windowTitle.label            "Account Wizard">
 

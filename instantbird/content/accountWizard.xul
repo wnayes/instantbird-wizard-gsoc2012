@@ -2,6 +2,10 @@
 <!-- This Source Code Form is subject to the terms of the Mozilla Public
    - License, v. 2.0. If a copy of the MPL was not distributed with this
    - file, You can obtain one at http://mozilla.org/MPL/2.0/. -->
+   
+<!-- This was the original wizard XUL outline used in previous releases
+   - of Instantbird. My changes mainly involved altering the wizardpage
+   - entries to use more methods to create the new wizard navigation flow -->
 
 
 <?xml-stylesheet href="chrome://global/skin/" type="text/css"?>

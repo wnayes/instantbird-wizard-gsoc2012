@@ -1,6 +1,12 @@
 /* This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+ 
+// This file contained the original account wizard found in all previous
+// Instantbird releases. Numerous changes were made to add the account
+// importing functionality. To see exactly what was changed, consider
+// looking in the GSoCFinalSubmission.patch:
+// https://github.com/wnayes/instantbird-wizard-gsoc2012/blob/master/GSoCFinalSubmission.patch#L4773
 
 const {classes: Cc, interfaces: Ci, utils: Cu} = Components;
 Cu.import("resource:///modules/imServices.jsm");
